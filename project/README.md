@@ -43,17 +43,18 @@ The application user is an accommodation administrator. They pair guests to host
 
 ### Planning
 
-#### Project Set Up
-* [ ] Create the Maven Project
+#### Project Set Up 
+* [X] Create the Maven Project 
 * [ ] Add JUnit Dependency
 * [ ] Add Spring DI Dependency
 * [ ] Stub out package structure
 * [ ] Stub out the App main method
+* All above ^: Day 1 Evening 1 hour
 
 #### Models
 * Package: learn.dontwreckmyhouse.models
 
-* [ ] Define ` Host ` model
+* [ ] Define ` Host ` model (Day 1 Evening - 20min)
   * `id` - UUID - `String`
   * `last_name` - `String`
   * `email` - `String`
@@ -65,7 +66,7 @@ The application user is an accommodation administrator. They pair guests to host
   * `standard_rate` - `BigDecimal`
   * `weekend_rate` - `BigDecimal`
   
-* [ ] Define `Guest` model
+* [ ] Define `Guest` model (Day 1 Evening - 20min)
   * `guest_id` - `int`
   * `first_name` - `String`
   * `last_name` - `String`
@@ -73,7 +74,7 @@ The application user is an accommodation administrator. They pair guests to host
   * `phone` - `String`
   * `state` - `String`
   
-* [ ] Define `Reservation` model
+* [ ] Define `Reservation` model (Day 1 Evening - 20min)
   * ** UUID Identifier.csv UNKNOWN - Generate this...apply it to .csv title  **
   * `id` - `int` ** Use nextId to generate this aside from the UUID 
   * `start_date` - `LocalDate`
@@ -122,58 +123,63 @@ The application user is an accommodation administrator. They pair guests to host
   
 ### Steps 
 ##### View Reservations By Host
-* Data Layer
+* Data Layer `(Day 1 evening ~1.5 hrs, into Day 2 morning potentially ~1.5 hrs)`
   * [ ] Build methods in corresponding file repo's and double 
-  * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer
+  * [ ] Test methods built, both happy and unhappy paths 
+* Domain Layer `(Day 2 morning - 2 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Test methods built, both happy and unhappy paths
-* Ui layer
+* Ui layer `(Day 2 Afternoon - 3hrs)`
   * [ ] Build methods in corresponding controller/view
   * [ ] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
-* App Class
+* App Class `(Day 2 afternoon - 1 hr)`
   * [ ] Implement Spring DI (Annotation) throughout code
   * [ ] Run app and test the menu navigates properly 
 
 ##### Create a Reservation
-* Data Layer
+* Data Layer `(Day 2 evening - 3 hrs)`
   * [ ] Build methods in corresponding file repo's and double
   * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer
+* Domain Layer `(Day 3 morning - 3 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
   * [ ] Test methods built, both happy and unhappy paths
-* Ui layer
+* Ui layer `(Day 3 morning/afternoon - 2 hrs)`
   * [ ] Build methods in corresponding controller/view
   * [ ] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
 
 ##### Edit an Existing Reservation
-* Data Layer
+* Data Layer `(Day 3 afternoon - 3 hrs)`
   * [ ] Build methods in corresponding file repo's and double
   * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer
+* Domain Layer `(Day 3 evening - 3 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
   * [ ] Test methods built, both happy and unhappy paths
-* Ui layer
+* Ui layer `(Day 4 morning/afternoon - 4 hrs)`
   * [ ] Build methods in corresponding controller/view
   * [ ] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
 
 ##### Cancel an Existing Reservation
-* Data Layer
+* Data Layer `(Day 4 afternoon - 2 hrs)`
   * [ ] Build methods in corresponding file repo's and double
   * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer
+* Domain Layer `(Day 4 afternoon/evening - 2 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
   * [ ] Test methods built, both happy and unhappy paths
-* Ui layer
+* Ui layer `(Day 5 morning - 1.5 hrs)`
   * [ ] Build methods in corresponding controller/view
   * [ ] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
+  
+* [ ] Run through App and test all validations (Day 5 morning/afternoon - 2 hrs)
+* [ ] Tidy code and UI `(Day 5 afternoon - 1 hr)`
+
+Stretch goals over the weekend if I follow this schedule and MVP is done
    
 
   
