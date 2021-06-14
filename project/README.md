@@ -107,6 +107,7 @@ The application user is an accommodation administrator. They pair guests to host
   * `HostService`
   * `GuestService`
   * `ReservationService`
+  * `Result`
 * Testing
   * `HostServiceTest`
   * `GuestServiceTest`
