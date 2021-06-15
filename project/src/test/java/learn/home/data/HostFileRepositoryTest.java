@@ -32,4 +32,13 @@ class HostFileRepositoryTest {
         assertEquals(HOST_COUNT, all.size());
     }
 
+    @Test
+    void shouldFindHostWithValidEmail() throws DataAccessException {
+        Host result = repository.findHostByEmail("eyearnes0@sfgate.com");
+
+        assertNotNull(result);
+        assertEquals("Amarillo", result.getCity());
+        assertEquals("Yearnes", result.getLast_name());
+    }
+
 }

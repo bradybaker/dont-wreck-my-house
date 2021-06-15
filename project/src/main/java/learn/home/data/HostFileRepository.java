@@ -36,6 +36,16 @@ public class HostFileRepository implements HostRepository {
         return result;
     }
 
+    public Host findHostByEmail(String email) throws DataAccessException {
+        Host result = new Host();
+        for (Host host : findAll()) {
+            if (email.equalsIgnoreCase(host.getEmail())) {
+                result = host;
+            }
+        }
+        return result;
+    }
+
     private Host lineToHost(String line) {
         String[] fields = line.split(DELIMITER);
 

@@ -7,4 +7,6 @@ import java.util.List;
 public interface HostRepository {
 
     List<Host> findAll() throws DataAccessException;
+
+    Host findHostByEmail(String email) throws DataAccessException;
 }
