@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationFileRepository {
+public class ReservationFileRepository implements ReservationRepository{
 
     private final String directory;
     private static final String DELIMITER = ",";
@@ -24,6 +24,7 @@ public class ReservationFileRepository {
         this.directory = directory;
     }
 
+    @Override
     public List<Reservation> findAllByHostId(String hostId) throws DataAccessException {
         ArrayList<Reservation> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath(hostId)))) {

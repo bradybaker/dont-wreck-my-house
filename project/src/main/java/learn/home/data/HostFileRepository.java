@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HostFileRepository {
+public class HostFileRepository implements HostRepository {
 
     private final String filePath;
     private static final String DELIMITER = ",";
