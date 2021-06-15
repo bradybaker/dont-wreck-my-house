@@ -11,8 +11,8 @@ public class HostRepositoryDouble implements HostRepository {
     private final ArrayList<Host> hosts = new ArrayList<>();
     public final static Host HOST1 = new Host("498604db-b6d6-4599-a503-3d8190fda823", "Smith", "smith@gmail.com", "888-888-0000",
             "123 Second Ave", "Townie City", "CA", "90210", new BigDecimal(100.00), new BigDecimal(150.00));
-    public final static Host HOST2 = new Host("498604db-b6d6-4599-a503-3d8190fda823", "Smith", "smith@gmail.com", "888-888-0000",
-            "123 Second Ave", "Townie City", "CA", "90210", new BigDecimal(100.00), new BigDecimal(150.00));
+    public final static Host HOST2 = new Host("498604db-b6d6-4599-a503-3d8190fda111", "Jenkins", "jenkins@gmail.com", "888-888-5555",
+            "456 Third Street", "Loud City", "NY", "55416", new BigDecimal(200.00), new BigDecimal(300.00));
 
     public HostRepositoryDouble() {
         hosts.add(HOST1);
