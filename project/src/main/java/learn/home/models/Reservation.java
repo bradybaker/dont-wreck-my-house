@@ -6,9 +6,11 @@ import java.time.LocalDate;
 public class Reservation {
 
     private int id;
+    private Host host;
     private LocalDate start_date;
     private LocalDate end_date;
     private int guest_id;
+    private Guest guest;
     private BigDecimal total;
 
     public Reservation() {
@@ -61,5 +63,21 @@ public class Reservation {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public Host getHost() {
+        return host;
+    }
+
+    public void setHost(Host host) {
+        this.host = host;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 }
