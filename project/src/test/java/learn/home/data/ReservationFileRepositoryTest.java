@@ -34,7 +34,7 @@ class ReservationFileRepositoryTest {
     void shouldFindAllReservations() throws DataAccessException {
         List<Reservation> all = repository.findAllByHostId(hostId);
 
-        assertEquals(12, all.size());
+        assertEquals(RESERVATION_COUNT, all.size());
     }
 
 
