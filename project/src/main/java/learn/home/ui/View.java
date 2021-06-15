@@ -38,15 +38,15 @@ public class View {
 
         assert reservations != null;
         Host host = reservations.get(0).getHost();
-        io.printf("%s: %s, %s", host.getLast_name(), host.getCity(), host.getState());
-        for (int i = 0; i < reservations.size(); i++) {
+        io.printf("%s: %s, %s%n", host.getLast_name(), host.getCity(), host.getState());
+        for (Reservation reservation : reservations) {
             io.printf("ID: %s, %s - %s, Guest: %s, %s, Email: %s%n",
-                    reservations.get(i).getId(),
-                    reservations.get(i).getStart_date(),
-                    reservations.get(i).getEnd_date(),
-                    reservations.get(i).getGuest().getLast_name(),
-                    reservations.get(i).getGuest().getFirst_name(),
-                    reservations.get(i).getGuest().getEmail());
+                    reservation.getId(),
+                    reservation.getStart_date(),
+                    reservation.getEnd_date(),
+                    reservation.getGuest().getLast_name(),
+                    reservation.getGuest().getFirst_name(),
+                    reservation.getGuest().getEmail());
         }
     }
 
