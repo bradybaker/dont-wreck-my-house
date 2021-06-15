@@ -75,8 +75,7 @@ The application user is an accommodation administrator. They pair guests to host
   * `state` - `String`
   
 * [ ] Define `Reservation` model (Day 1 Evening - 20min)
-  * ** UUID Identifier.csv UNKNOWN - Generate this...apply it to .csv title  **
-  * `id` - `int` ** Use nextId to generate this aside from the UUID 
+  * `id` - `int`
   * `start_date` - `LocalDate`
   * `end_date` - `LocalDate`
   * `guest_id` - `int`
