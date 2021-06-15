@@ -3,7 +3,10 @@ package learn.home.ui;
 import com.sun.tools.javac.Main;
 import learn.home.data.DataAccessException;
 import learn.home.domain.ReservationService;
+import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Controller {
@@ -36,6 +39,7 @@ public class Controller {
                     break;
                 case VIEW_RESERVATION_FOR_HOST:
                     view.displayHeader(MainMenuOption.VIEW_RESERVATION_FOR_HOST.getDisplayText());
+                    viewReservationsByHost();
                     break;
                 case MAKE_A_RESERVATION:
                     view.displayHeader(MainMenuOption.MAKE_A_RESERVATION.getDisplayText());
@@ -49,4 +53,12 @@ public class Controller {
             }
         } while (option != MainMenuOption.EXIT);
     }
+
+    private void viewReservationsByHost() throws DataAccessException {
+        String email = view.getHostEmail();
+        List<Reservation> reservations = reservationService.findReservationByEmail(email);
+        view.displayReservationsByHost(reservations);
+        view.enterToContinue();
+    }
+
 }

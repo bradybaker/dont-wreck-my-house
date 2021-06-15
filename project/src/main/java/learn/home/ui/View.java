@@ -1,5 +1,7 @@
 package learn.home.ui;
 
+import learn.home.models.Host;
+import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,11 +27,32 @@ public class View {
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
 
+    public String getHostEmail() {
+        return io.readString("Host Email: ");
+    }
 
+    public void displayReservationsByHost(List<Reservation> reservations) {
+        if (reservations == null || reservations.isEmpty()) {
+            io.println("No reservations found. Please search again");
+        }
 
+        assert reservations != null;
+        Host host = reservations.get(0).getHost();
+        io.printf("%s: %s, %s", host.getLast_name(), host.getCity(), host.getState());
+        for (int i = 0; i < reservations.size(); i++) {
+            io.printf("ID: %s, %s - %s, Guest: %s, %s, Email: %s%n",
+                    reservations.get(i).getId(),
+                    reservations.get(i).getStart_date(),
+                    reservations.get(i).getEnd_date(),
+                    reservations.get(i).getGuest().getLast_name(),
+                    reservations.get(i).getGuest().getFirst_name(),
+                    reservations.get(i).getGuest().getEmail());
+        }
+    }
 
-
-
+    public void enterToContinue() {
+        io.readString("Press [Enter] to continue.");
+    }
 
     public void displayHeader(String message) {
         io.println("");

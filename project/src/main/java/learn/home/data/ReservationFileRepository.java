@@ -83,6 +83,7 @@ public class ReservationFileRepository implements ReservationRepository{
         Host host = new Host();
         host.setId(hostId);
         result.setHost(host);
+
         return result;
     }
 }

@@ -28,6 +28,7 @@ public class ReservationService {
         Map<String, Host> hostMap = hostRepository.findAll().stream()
                 .collect(Collectors.toMap(Host::getId, i -> i));
 
+        List<Guest> guests = guestRepository.findAll();
         Map<Integer, Guest> guestMap = guestRepository.findAll().stream()
                 .collect(Collectors.toMap(Guest::getGuest_id, i -> i));
 
