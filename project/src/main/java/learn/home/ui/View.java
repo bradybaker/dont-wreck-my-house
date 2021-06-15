@@ -1,7 +1,10 @@
 package learn.home.ui;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class View {
 
     private final ConsoleIO io;
@@ -18,7 +21,7 @@ public class View {
             max = Math.max(max, option.getValue());
         }
 
-        String message = String.format("Select [%s-%s]: ", min, max - 1);
+        String message = String.format("Select [%s-%s]: ", min, max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
 

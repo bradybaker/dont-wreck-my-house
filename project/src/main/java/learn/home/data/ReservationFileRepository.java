@@ -3,6 +3,8 @@ package learn.home.data;
 import learn.home.models.Guest;
 import learn.home.models.Host;
 import learn.home.models.Reservation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,13 +16,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ReservationFileRepository implements ReservationRepository{
 
     private final String directory;
     private static final String DELIMITER = ",";
     private static final String DELIMITER_REPLACEMENT = "@@@";
 
-    public ReservationFileRepository(String directory) {
+    public ReservationFileRepository(@Value("${reservationDirPath}") String directory) {
         this.directory = directory;
     }
 

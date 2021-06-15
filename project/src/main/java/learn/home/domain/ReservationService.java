@@ -4,11 +4,13 @@ import learn.home.data.*;
 import learn.home.models.Guest;
 import learn.home.models.Host;
 import learn.home.models.Reservation;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;

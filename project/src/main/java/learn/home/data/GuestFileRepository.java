@@ -1,6 +1,8 @@
 package learn.home.data;
 
 import learn.home.models.Guest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,13 +11,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Repository
 public class GuestFileRepository implements GuestRepository {
 
     private final String filePath;
     private static final String DELIMITER = ",";
     private static final String DELIMITER_REPLACEMENT = "@@@";
 
-    public GuestFileRepository(String filePath) {
+    public GuestFileRepository(@Value("${guestFilePath}") String filePath) {
         this.filePath = filePath;
     }
 
