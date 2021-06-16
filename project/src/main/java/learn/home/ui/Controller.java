@@ -1,6 +1,5 @@
 package learn.home.ui;
 
-import com.sun.tools.javac.Main;
 import learn.home.data.DataAccessException;
 import learn.home.domain.GuestService;
 import learn.home.domain.HostService;
@@ -77,6 +76,9 @@ public class Controller {
 
         List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
         view.displayReservationsByHost(reservations);
+
+//        Reservation reservation = view.makeReservation(host, guest);
+
 
     }
 

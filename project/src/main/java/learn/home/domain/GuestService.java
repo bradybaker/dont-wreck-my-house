@@ -3,7 +3,6 @@ package learn.home.domain;
 import learn.home.data.DataAccessException;
 import learn.home.data.GuestRepository;
 import learn.home.models.Guest;
-import learn.home.models.Host;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
