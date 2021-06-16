@@ -53,19 +53,30 @@ public class View {
         }
     }
 
-//    public Reservation makeReservation(Host host, Guest guest) {
-//        Reservation res = new Reservation();
-//        res.setHost(host);
-//        res.setGuest(guest);
-//        LocalDate startDate = io.readLocalDate("Start Date [MM/dd/yyyy]: ");
-//        res.setStart_date(startDate);
-//        LocalDate endDate = io.readLocalDate("End Date [MM/dd/yyyy]: ");
-//        res.setEnd_date(endDate);
-//        res.setGuest_id(guest.getGuest_id());
-//    }
+    public Reservation makeReservation(Host host, Guest guest) {
+        Reservation res = new Reservation();
+        res.setHost(host);
+        res.setGuest(guest);
+        LocalDate startDate = io.readLocalDate("Start Date [MM/dd/yyyy]: ");
+        res.setStart_date(startDate);
+        LocalDate endDate = io.readLocalDate("End Date [MM/dd/yyyy]: ");
+        res.setEnd_date(endDate);
+        res.setGuest_id(guest.getGuest_id());
+        return res;
+    }
 
     public void enterToContinue() {
         io.readString("Press [Enter] to continue.");
+    }
+
+    public boolean displaySummary(Reservation reservation) {
+        boolean isConfirmed;
+        displayHeader("Summary");
+        io.println("Start Date: " + reservation.getStart_date());
+        io.println("End Date: " + reservation.getEnd_date());
+        io.println("Total: " + reservation.getTotal());
+        isConfirmed = io.readBoolean("Is this ok?");
+        return isConfirmed;
     }
 
     public void displayHeader(String message) {

@@ -4,6 +4,7 @@ import learn.home.data.DataAccessException;
 import learn.home.domain.GuestService;
 import learn.home.domain.HostService;
 import learn.home.domain.ReservationService;
+import learn.home.domain.Result;
 import learn.home.models.Guest;
 import learn.home.models.Host;
 import learn.home.models.Reservation;
@@ -69,17 +70,30 @@ public class Controller {
     }
 
     private void addReservation() throws DataAccessException {
-        String guestEmail = view.getGuestEmail();
-        Guest guest = guestService.findGuestByEmail(guestEmail);
-        String hostEmail = view.getHostEmail();
-        Host host = hostService.findHostByEmail(hostEmail);
+        boolean isConfirmed = false;
+        while (!isConfirmed) {
+            String guestEmail = view.getGuestEmail();
+            Guest guest = guestService.findGuestByEmail(guestEmail);
+            String hostEmail = view.getHostEmail();
+            Host host = hostService.findHostByEmail(hostEmail);
 
-        List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
-        view.displayReservationsByHost(reservations);
+            List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
+            view.displayReservationsByHost(reservations);
 
-//        Reservation reservation = view.makeReservation(host, guest);
-
-
+            Reservation reservation = view.makeReservation(host, guest);
+            Result<Reservation> result = reservationService.addReservation(reservation);
+            if (!result.isSuccess()) {
+                view.displayStatus(false, result.getMessages());
+                isConfirmed = true;
+            } else {
+                isConfirmed = view.displaySummary(reservation);
+                String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
+                view.displayStatus(true, successMessage);
+            }
+        }
     }
+
+
+
 
 }
