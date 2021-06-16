@@ -2,7 +2,11 @@ package learn.home.ui;
 
 import com.sun.tools.javac.Main;
 import learn.home.data.DataAccessException;
+import learn.home.domain.GuestService;
+import learn.home.domain.HostService;
 import learn.home.domain.ReservationService;
+import learn.home.models.Guest;
+import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +16,14 @@ import java.util.List;
 public class Controller {
 
     private final ReservationService reservationService;
+    private final HostService hostService;
+    private final GuestService guestService;
     private final View view;
 
-    public Controller(ReservationService reservationService, View view) {
+    public Controller(ReservationService reservationService, HostService hostService, GuestService guestService, View view) {
         this.reservationService = reservationService;
+        this.hostService = hostService;
+        this.guestService = guestService;
         this.view = view;
     }
 
@@ -59,6 +67,17 @@ public class Controller {
         List<Reservation> reservations = reservationService.findReservationByEmail(email);
         view.displayReservationsByHost(reservations);
         view.enterToContinue();
+    }
+
+    private void addReservation() throws DataAccessException {
+        String guestEmail = view.getGuestEmail();
+        Guest guest = guestService.findGuestByEmail(guestEmail);
+        String hostEmail = view.getHostEmail();
+        Host host = hostService.findHostByEmail(hostEmail);
+
+        List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
+        view.displayReservationsByHost(reservations);
+
     }
 
 }

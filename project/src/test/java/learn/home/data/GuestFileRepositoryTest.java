@@ -33,4 +33,11 @@ class GuestFileRepositoryTest {
         assertEquals(GUEST_COUNT, all.size());
     }
 
+    @Test
+    void shouldFindGuestByEmail() throws DataAccessException {
+        Guest guest = repository.findGuestByEmail("slomas0@mediafire.com");
+        assertEquals("slomas0@mediafire.com", guest.getEmail());
+        assertEquals("Sullivan", guest.getFirst_name());
+    }
+
 }

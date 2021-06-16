@@ -25,4 +25,12 @@ public class GuestRepositoryDouble implements GuestRepository{
     @Override
     public List<Guest> findAll() throws DataAccessException { return new ArrayList<>(guests); }
 
+    @Override
+    public Guest findGuestByEmail(String email) throws DataAccessException {
+        return findAll().stream()
+                .filter(g -> g.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

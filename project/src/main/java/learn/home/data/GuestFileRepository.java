@@ -1,6 +1,7 @@
 package learn.home.data;
 
 import learn.home.models.Guest;
+import learn.home.models.Host;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,16 @@ public class GuestFileRepository implements GuestRepository {
             // ignore since it is ok that file may not exist when app starts
         } catch (IOException ex) {
             throw new DataAccessException(ex.getMessage(), ex);
+        }
+        return result;
+    }
+
+    public Guest findGuestByEmail(String email) throws DataAccessException {
+        Guest result = new Guest();
+        for (Guest guest : findAll()) {
+            if (email.equalsIgnoreCase(guest.getEmail())) {
+                result = guest;
+            }
         }
         return result;
     }

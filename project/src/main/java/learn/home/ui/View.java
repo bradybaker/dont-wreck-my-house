@@ -27,9 +27,9 @@ public class View {
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
 
-    public String getHostEmail() {
-        return io.readString("Host Email: ");
-    }
+    public String getHostEmail() { return io.readRequiredString("Host Email: "); }
+
+    public String getGuestEmail() {return io.readRequiredString("Guest Email: "); }
 
     public void displayReservationsByHost(List<Reservation> reservations) {
         if (reservations == null || reservations.isEmpty()) {
