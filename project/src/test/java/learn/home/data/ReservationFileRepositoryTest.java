@@ -65,5 +65,26 @@ class ReservationFileRepositoryTest {
         assertEquals(LocalDate.of(2024, 1, 1), all.get(12).getStart_date());
     }
 
+    @Test
+    void shouldDeleteReservation() throws DataAccessException {
+        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
+                1, 1), 1, new BigDecimal(1000));
+
+        Host host = new Host();
+        host.setId(hostId);
+        result.setHost(host);
+
+        Guest guest = new Guest();
+        guest.setGuest_id(1);
+        result.setGuest(guest);
+
+        result = repository.addReservation(result);
+        boolean success = repository.deleteReservation(result);
+        List<Reservation> all = repository.findAllByHostId(hostId);
+
+        assertTrue(success);
+        assertEquals(12, all.size());
+    }
+
 
 }

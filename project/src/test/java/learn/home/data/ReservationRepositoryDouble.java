@@ -48,4 +48,8 @@ public class ReservationRepositoryDouble implements ReservationRepository {
         return reservation;
     }
 
+    public boolean deleteReservation(Reservation reservation) throws DataAccessException {
+        return true;
+    }
+
 }

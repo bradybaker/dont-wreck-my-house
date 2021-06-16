@@ -151,7 +151,7 @@ The application user is an accommodation administrator. They pair guests to host
       * [X] Reservations may never overlap another
           * Plan: Review local date exercises and review syntax
       * [X] SD must be in the future 
-  * [ ] Calculate total cost from SD and ED. 
+  * [X] Calculate total cost from SD and ED. 
       * Plan: Loop through dates of reservation (SD and ED)
         * Check what day of the week it is
         * If week day: Add standard rate to total variable
@@ -159,11 +159,12 @@ The application user is an accommodation administrator. They pair guests to host
         * Set total variable of Reservation to this sum 
         * QUESTION: What layer should this be happening in? Domain is what I am 
     naturally leaning towards
-  * [ ] Test methods built and validation, both happy and unhappy paths
+  * [X] Test methods built and validation, both happy and unhappy paths
 * Ui layer `(Day 3 afternoon - 4 hrs)`
   * [X] Build methods in corresponding controller/view
   * [X] Build corresponding helper methods in consoleIO
-  * [ ] Build Main Menu methods/run methods 
+  * [X] Build Main Menu methods/run methods 
+  * [ ] NOT FULLY COMPLETE UNTIL REMOVE RESERVATION IS ADDED
 
 ##### Edit an Existing Reservation
 * Data Layer `(Day 3 afternoon/evening - 1 hr)`
@@ -180,8 +181,8 @@ The application user is an accommodation administrator. They pair guests to host
 
 ##### Cancel an Existing Reservation
 * Data Layer `(Day 4 afternoon - 2 hrs)`
-  * [ ] Build methods in corresponding file repo's and double
-  * [ ] Test methods built, both happy and unhappy paths
+  * [X] Build methods in corresponding file repo's and double
+  * [X] Test methods built, both happy and unhappy paths
 * Domain Layer `(Day 4 afternoon/evening - 2 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
