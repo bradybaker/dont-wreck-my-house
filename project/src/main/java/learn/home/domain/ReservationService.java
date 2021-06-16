@@ -63,26 +63,30 @@ public class ReservationService {
 
         if (reservation.getStart_date() == null) {
             result.addErrorMessage("Reservation start date is required");
+            return result;
         }
 
         if (reservation.getEnd_date() == null) {
             result.addErrorMessage("Reservation end date is required");
+            return result;
         }
 
         if (reservation.getHost() == null) {
             result.addErrorMessage("Host not found");
+            return result;
         }
 
         if (reservation.getGuest() == null) {
             result.addErrorMessage("Guest not found");
-        }
-
-        if (reservation.getStart_date().isAfter(reservation.getEnd_date())) {
-            result.addErrorMessage("Reservation start date must be before the end date");
+            return result;
         }
 
         if (reservation.getStart_date().isBefore(LocalDate.now())) {
             result.addErrorMessage("Reservation start date must be in the future");
+        }
+
+        if (reservation.getStart_date().isAfter(reservation.getEnd_date())) {
+            result.addErrorMessage("Reservation start date must be before the end date");
         }
 
         List<Reservation> all = reservationRepository.findAllByHostId(reservation.getHost().getId());
