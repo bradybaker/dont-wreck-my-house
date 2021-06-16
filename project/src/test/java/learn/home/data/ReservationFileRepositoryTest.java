@@ -59,6 +59,10 @@ class ReservationFileRepositoryTest {
 
         assertNotNull(result);
         assertEquals(13, all.size());
+        assertEquals(1, result.getGuest_id());
+        assertEquals(13, all.get(12).getId());
+        assertEquals(new BigDecimal(1000), all.get(12).getTotal());
+        assertEquals(LocalDate.of(2024, 1, 1), all.get(12).getStart_date());
     }
 
 
