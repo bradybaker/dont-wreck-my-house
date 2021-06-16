@@ -45,16 +45,16 @@ The application user is an accommodation administrator. They pair guests to host
 
 #### Project Set Up 
 * [X] Create the Maven Project 
-* [ ] Add JUnit Dependency
-* [ ] Add Spring DI Dependency
-* [ ] Stub out package structure
-* [ ] Stub out the App main method
+* [X] Add JUnit Dependency
+* [X] Add Spring DI Dependency
+* [X] Stub out package structure
+* [X] Stub out the App main method
 * All above ^: Day 1 Evening 1 hour
 
 #### Models
 * Package: learn.dontwreckmyhouse.models
 
-* [ ] Define ` Host ` model (Day 1 Evening - 20min)
+* [X] Define ` Host ` model (Day 1 Evening - 20min)
   * `id` - UUID - `String`
   * `last_name` - `String`
   * `email` - `String`
@@ -66,7 +66,7 @@ The application user is an accommodation administrator. They pair guests to host
   * `standard_rate` - `BigDecimal`
   * `weekend_rate` - `BigDecimal`
   
-* [ ] Define `Guest` model (Day 1 Evening - 20min)
+* [X] Define `Guest` model (Day 1 Evening - 20min)
   * `guest_id` - `int`
   * `first_name` - `String`
   * `last_name` - `String`
@@ -74,12 +74,14 @@ The application user is an accommodation administrator. They pair guests to host
   * `phone` - `String`
   * `state` - `String`
   
-* [ ] Define `Reservation` model (Day 1 Evening - 20min)
+* [X] Define `Reservation` model (Day 1 Evening - 20min)
   * `id` - `int`
   * `start_date` - `LocalDate`
   * `end_date` - `LocalDate`
   * `guest_id` - `int`
   * `total` - `BigDecimal`
+  * `host` - `Host`
+  * `guest` - `Guest`
   
 #### Data Layer
 * Package: learn.house.data
@@ -124,37 +126,50 @@ The application user is an accommodation administrator. They pair guests to host
 ### Steps 
 ##### View Reservations By Host
 * Data Layer `(Day 1 evening ~1.5 hrs, into Day 2 morning potentially ~1.5 hrs)`
-  * [ ] Build methods in corresponding file repo's and double 
-  * [ ] Test methods built, both happy and unhappy paths 
+  * [X] Build methods in corresponding file repo's and double 
+  * [X] Test methods built, both happy and unhappy paths 
 * Domain Layer `(Day 2 morning - 2 hrs)`
-  * [ ] Build methods in corresponding services
-  * [ ] Test methods built, both happy and unhappy paths
+  * [X] Build methods in corresponding services
+  * [X] Test methods built, both happy and unhappy paths
 * Ui layer `(Day 2 Afternoon - 3hrs)`
-  * [ ] Build methods in corresponding controller/view
-  * [ ] Build corresponding helper methods in consoleIO
-  * [ ] Build Main Menu methods/run methods 
+  * [X] Build methods in corresponding controller/view
+  * [X] Build corresponding helper methods in consoleIO
+  * [X] Build Main Menu methods/run methods 
 * App Class `(Day 2 afternoon - 1 hr)`
-  * [ ] Implement Spring DI (Annotation) throughout code
-  * [ ] Run app and test the menu navigates properly 
+  * [X] Implement Spring DI (Annotation) throughout code
+  * [X] Run app and test the menu navigates properly 
 
 ##### Create a Reservation
 * Data Layer `(Day 2 evening - 3 hrs)`
-  * [ ] Build methods in corresponding file repo's and double
-  * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer `(Day 3 morning - 3 hrs)`
+  * [X] Build methods in corresponding file repo's and double
+  * [X] Test methods built, both happy and unhappy paths
+* Domain Layer `(Day 3 morning - 4 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
-  * [ ] Test methods built, both happy and unhappy paths
-* Ui layer `(Day 3 morning/afternoon - 2 hrs)`
+      * [ ] Guest, Host, SD, and ED are required
+      * [ ] SD must come before the ED
+      * [ ] Reservations may never overlap another
+          * Plan: Review local date exercises and review syntax
+      * [ ] SD must be in the future 
+  * [ ] Calculate total cost from SD and ED. 
+      * Plan: Loop through dates of reservation (SD and ED)
+        * Check what day of the week it is
+        * If week day: Add standard rate to total variable
+        * If weekend day: Add weekend rate to total variable 
+        * Set total variable of Reservation to this sum 
+        * QUESTION: What layer should this be happening in? Domain is what I am 
+    naturally leaning towards
+  * [ ] Test methods built and validation, both happy and unhappy paths
+* Ui layer `(Day 3 afternoon - 4 hrs)`
   * [ ] Build methods in corresponding controller/view
   * [ ] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
 
 ##### Edit an Existing Reservation
-* Data Layer `(Day 3 afternoon - 3 hrs)`
+* Data Layer `(Day 3 afternoon/evening - 1 hr)`
   * [ ] Build methods in corresponding file repo's and double
   * [ ] Test methods built, both happy and unhappy paths
-* Domain Layer `(Day 3 evening - 3 hrs)`
+* Domain Layer `(Day 3 evening - 2 hrs)`
   * [ ] Build methods in corresponding services
   * [ ] Implement validation methods
   * [ ] Test methods built, both happy and unhappy paths
