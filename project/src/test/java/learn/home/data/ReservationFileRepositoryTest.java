@@ -1,13 +1,17 @@
 package learn.home.data;
 
+import learn.home.models.Guest;
+import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +39,26 @@ class ReservationFileRepositoryTest {
         List<Reservation> all = repository.findAllByHostId(hostId);
 
         assertEquals(RESERVATION_COUNT, all.size());
+    }
+
+    @Test
+    void shouldAddValidReservation() throws DataAccessException {
+        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
+                        1, 1), 1, new BigDecimal(1000));
+
+        Host host = new Host();
+        host.setId(hostId);
+        result.setHost(host);
+
+        Guest guest = new Guest();
+        guest.setGuest_id(1);
+        result.setGuest(guest);
+
+        result = repository.addReservation(result);
+        List<Reservation> all = repository.findAllByHostId(hostId);
+
+        assertNotNull(result);
+        assertEquals(13, all.size());
     }
 
 
