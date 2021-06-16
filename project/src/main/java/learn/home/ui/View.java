@@ -69,13 +69,16 @@ public class View {
         io.readString("Press [Enter] to continue.");
     }
 
-    public boolean displaySummary(Reservation reservation) {
-        boolean isConfirmed;
+    public void displaySummary(Reservation reservation) {
         displayHeader("Summary");
         io.println("Start Date: " + reservation.getStart_date());
         io.println("End Date: " + reservation.getEnd_date());
-        io.println("Total: " + reservation.getTotal());
-        isConfirmed = io.readBoolean("Is this ok?");
+        io.println("Total: $" + reservation.getTotal());
+    }
+
+    public boolean displayConfirmation() {
+        boolean isConfirmed;
+        isConfirmed = io.readBoolean("Is this ok? [y/n]: ");
         return isConfirmed;
     }
 

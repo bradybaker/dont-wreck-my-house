@@ -46,6 +46,8 @@ public class ReservationFileRepository implements ReservationRepository{
 
     public Reservation addReservation(Reservation reservation) throws DataAccessException {
         List<Reservation> all = findAllByHostId(reservation.getHost().getId());
+        int nextId = getNextId(all);
+        reservation.setId(nextId);
         all.add(reservation);
         writeAll(all, reservation.getHost().getId());
         return reservation;
@@ -54,24 +56,6 @@ public class ReservationFileRepository implements ReservationRepository{
     private String getFilePath(String hostId) {
         return Paths.get(directory, hostId + ".csv").toString();
     }
-
-//    private Reservation lineToReservation(String line) {
-//        String[] fields = line.split(DELIMITER);
-//
-//        if (fields.length != 5) {
-//            return null;
-//        }
-//
-//        Reservation reservation = new Reservation(
-//                Integer.parseInt(fields[0]),
-//                LocalDate.parse(fields[1]),
-//                LocalDate.parse(fields[2]),
-//                Integer.parseInt(fields[3]),
-//                new BigDecimal(fields[4])
-//        );
-//
-//        return reservation;
-//    }
 
     private Reservation deserialize(String[] fields, String hostId) {
         Reservation result = new Reservation();
@@ -115,6 +99,16 @@ public class ReservationFileRepository implements ReservationRepository{
         return buffer.toString();
     }
 
+    private int getNextId(List<Reservation> reservations) {
+        int maxId = 0;
+        for (Reservation reservation : reservations) {
+            if (maxId < reservation.getId()) {
+                maxId = reservation.getId();
+            }
+        }
+        return maxId + 1;
+    }
+
     private String clean(String value) {
         return value.replace(DELIMITER, DELIMITER_REPLACEMENT);
     }
@@ -122,4 +116,22 @@ public class ReservationFileRepository implements ReservationRepository{
     private String restore(String value) {
         return value.replace(DELIMITER_REPLACEMENT, DELIMITER);
     }
+
+    //    private Reservation lineToReservation(String line) {
+//        String[] fields = line.split(DELIMITER);
+//
+//        if (fields.length != 5) {
+//            return null;
+//        }
+//
+//        Reservation reservation = new Reservation(
+//                Integer.parseInt(fields[0]),
+//                LocalDate.parse(fields[1]),
+//                LocalDate.parse(fields[2]),
+//                Integer.parseInt(fields[3]),
+//                new BigDecimal(fields[4])
+//        );
+//
+//        return reservation;
+//    }
 }

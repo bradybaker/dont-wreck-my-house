@@ -51,6 +51,7 @@ public class Controller {
                     break;
                 case MAKE_A_RESERVATION:
                     view.displayHeader(MainMenuOption.MAKE_A_RESERVATION.getDisplayText());
+                    addReservation();
                     break;
                 case EDIT_A_RESERVATION:
                     view.displayHeader(MainMenuOption.EDIT_A_RESERVATION.getDisplayText());
@@ -82,18 +83,18 @@ public class Controller {
 
             Reservation reservation = view.makeReservation(host, guest);
             Result<Reservation> result = reservationService.addReservation(reservation);
+
             if (!result.isSuccess()) {
                 view.displayStatus(false, result.getMessages());
-                isConfirmed = true;
-            } else {
-                isConfirmed = view.displaySummary(reservation);
+            }
+
+            view.displaySummary(reservation);
+            isConfirmed = view.displayConfirmation();
+            if (isConfirmed) {
                 String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
                 view.displayStatus(true, successMessage);
             }
         }
     }
-
-
-
 
 }
