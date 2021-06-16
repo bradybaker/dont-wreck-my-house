@@ -211,4 +211,28 @@ class ReservationServiceTest {
         assertEquals("These dates conflict with an already existing reservation for this host", result.getMessages().get(0));
     }
 
+    @Test
+    void shouldNotAddReservationWhenSDAndEDAreEqualToTheSDAndEDOfExistingReservation() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2021, 10, 10));
+        res.setEnd_date(LocalDate.of(2021, 10, 13));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.setTotal(new BigDecimal(300.00));
+
+        Result<Reservation> result = service.addReservation(res);
+        assertFalse(result.isSuccess());
+        assertEquals("These dates conflict with an already existing reservation for this host", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldCalculateAccurateTotalWithHost1() {
+       BigDecimal total = service.calculateTotal(LocalDate.of(2021, 7, 1),
+       LocalDate.of(2021, 7, 5), HostRepositoryDouble.HOST1);
+
+       assertEquals(new BigDecimal("500.00"), total);
+    }
+
 }

@@ -62,7 +62,6 @@ public class View {
 //        LocalDate endDate = io.readLocalDate("End Date [MM/dd/yyyy]: ");
 //        res.setEnd_date(endDate);
 //        res.setGuest_id(guest.getGuest_id());
-//        res.setTotal(calculateTotal(startDate, endDate));
 //    }
 
     public void enterToContinue() {

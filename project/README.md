@@ -144,13 +144,13 @@ The application user is an accommodation administrator. They pair guests to host
   * [X] Build methods in corresponding file repo's and double
   * [X] Test methods built, both happy and unhappy paths
 * Domain Layer `(Day 3 morning - 4 hrs)`
-  * [ ] Build methods in corresponding services
-  * [ ] Implement validation methods
-      * [ ] Guest, Host, SD, and ED are required
-      * [ ] SD must come before the ED
-      * [ ] Reservations may never overlap another
+  * [X] Build methods in corresponding services
+  * [X] Implement validation methods
+      * [X] Guest, Host, SD, and ED are required
+      * [X] SD must come before the ED
+      * [X] Reservations may never overlap another
           * Plan: Review local date exercises and review syntax
-      * [ ] SD must be in the future 
+      * [X] SD must be in the future 
   * [ ] Calculate total cost from SD and ED. 
       * Plan: Loop through dates of reservation (SD and ED)
         * Check what day of the week it is
@@ -161,8 +161,8 @@ The application user is an accommodation administrator. They pair guests to host
     naturally leaning towards
   * [ ] Test methods built and validation, both happy and unhappy paths
 * Ui layer `(Day 3 afternoon - 4 hrs)`
-  * [ ] Build methods in corresponding controller/view
-  * [ ] Build corresponding helper methods in consoleIO
+  * [X] Build methods in corresponding controller/view
+  * [X] Build corresponding helper methods in consoleIO
   * [ ] Build Main Menu methods/run methods 
 
 ##### Edit an Existing Reservation

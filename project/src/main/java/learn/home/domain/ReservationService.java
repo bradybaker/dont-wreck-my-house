@@ -6,6 +6,8 @@ import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -53,9 +55,26 @@ public class ReservationService {
             return result;
         }
 
+        BigDecimal total = calculateTotal(reservation.getStart_date(), reservation.getEnd_date(), reservation.getHost());
+        reservation.setTotal(total);
         result.setPayload(reservationRepository.addReservation(reservation));
 
         return result;
+    }
+
+    public BigDecimal calculateTotal (LocalDate startDate, LocalDate endDate, Host host) {
+        BigDecimal total = new BigDecimal("0.00");
+        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
+        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
+
+        for (LocalDate current = startDate; current.compareTo(endDate) < 0; current = current.plusDays(1)) {
+            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                total = total.add(weekendRate);
+            } else {
+                total = total.add(standardRate);
+            }
+        }
+        return total;
     }
 
     private Result<Reservation> validate(Reservation reservation) throws DataAccessException {
