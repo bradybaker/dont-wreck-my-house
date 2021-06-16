@@ -6,6 +6,7 @@ import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,7 +29,6 @@ public class ReservationService {
         Map<String, Host> hostMap = hostRepository.findAll().stream()
                 .collect(Collectors.toMap(Host::getId, i -> i));
 
-        List<Guest> guests = guestRepository.findAll();
         Map<Integer, Guest> guestMap = guestRepository.findAll().stream()
                 .collect(Collectors.toMap(Guest::getGuest_id, i -> i));
 
@@ -38,6 +38,11 @@ public class ReservationService {
             reservation.setHost(hostMap.get(reservation.getHost().getId()));
             reservation.setGuest(guestMap.get(reservation.getGuest().getGuest_id()));
         }
-        return result;
+
+        List<Reservation> sortByStartDate = result.stream().sorted(Comparator.comparing(Reservation::getStart_date))
+                .collect(Collectors.toList());
+
+
+        return sortByStartDate;
     }
 }
