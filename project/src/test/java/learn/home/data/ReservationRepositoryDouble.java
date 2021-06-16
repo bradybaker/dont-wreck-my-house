@@ -42,4 +42,10 @@ public class ReservationRepositoryDouble implements ReservationRepository {
                 .collect(Collectors.toList());
     }
 
+
+    public Reservation addReservation(Reservation reservation) throws DataAccessException {
+        reservations.add(reservation);
+        return reservation;
+    }
+
 }

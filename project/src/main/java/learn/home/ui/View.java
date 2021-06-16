@@ -38,8 +38,8 @@ public class View {
 
         assert reservations != null;
         Host host = reservations.get(0).getHost();
-//        io.printf("%s: %s, %s%n", host.getLast_name(), host.getCity(), host.getState());
         displayHeader(host.getLast_name() + ": " + host.getCity() + ", " + host.getState());
+        io.println("(Sorted by Start Date)");
         for (Reservation reservation : reservations) {
             io.printf("ID: %s, %s - %s, Guest: %s, %s, Email: %s%n",
                     reservation.getId(),
