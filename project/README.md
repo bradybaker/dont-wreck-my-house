@@ -164,7 +164,7 @@ The application user is an accommodation administrator. They pair guests to host
   * [X] Build methods in corresponding controller/view
   * [X] Build corresponding helper methods in consoleIO
   * [X] Build Main Menu methods/run methods 
-  * [ ] NOT FULLY COMPLETE UNTIL REMOVE RESERVATION IS ADDED
+  * [X] NOT FULLY COMPLETE UNTIL REMOVE RESERVATION IS ADDED
 
 ##### Edit an Existing Reservation
 * Data Layer `(Day 3 afternoon/evening - 1 hr)`
@@ -184,13 +184,13 @@ The application user is an accommodation administrator. They pair guests to host
   * [X] Build methods in corresponding file repo's and double
   * [X] Test methods built, both happy and unhappy paths
 * Domain Layer `(Day 4 afternoon/evening - 2 hrs)`
-  * [ ] Build methods in corresponding services
-  * [ ] Implement validation methods
-  * [ ] Test methods built, both happy and unhappy paths
+  * [X] Build methods in corresponding services
+  * [X] Implement validation methods
+  * [X] Test methods built, both happy and unhappy paths
 * Ui layer `(Day 5 morning - 1.5 hrs)`
-  * [ ] Build methods in corresponding controller/view
-  * [ ] Build corresponding helper methods in consoleIO
-  * [ ] Build Main Menu methods/run methods 
+  * [X] Build methods in corresponding controller/view
+  * [X] Build corresponding helper methods in consoleIO
+  * [X] Build Main Menu methods/run methods 
   
 * [ ] Run through App and test all validations (Day 5 morning/afternoon - 2 hrs)
 * [ ] Tidy code and UI `(Day 5 afternoon - 1 hr)`
