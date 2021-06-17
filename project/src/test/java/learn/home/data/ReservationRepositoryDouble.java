@@ -42,6 +42,16 @@ public class ReservationRepositoryDouble implements ReservationRepository {
                 .collect(Collectors.toList());
     }
 
+    public Reservation findReservationById(int reservationId, String hostId) throws DataAccessException {
+        List<Reservation> all = findAllByHostId(hostId);
+        for (Reservation existing : all) {
+            if (existing.getId() == reservationId) {
+                return existing;
+            }
+        }
+        return null;
+    }
+
 
     public Reservation addReservation(Reservation reservation) throws DataAccessException {
         reservations.add(reservation);

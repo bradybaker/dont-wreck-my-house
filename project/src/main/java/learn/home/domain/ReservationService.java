@@ -49,6 +49,23 @@ public class ReservationService {
         return sortByStartDate;
     }
 
+    public List<Reservation> filterReservationsByGuestEmail(String hostEmail, String guestEmail) throws DataAccessException {
+        List<Reservation> all = findReservationByEmail(hostEmail);
+        return all.stream().filter(r -> r.getGuest().getEmail().equalsIgnoreCase(guestEmail))
+                .sorted(Comparator.comparing(Reservation::getStart_date)).collect(Collectors.toList());
+    }
+
+    public Reservation findReservationById(int reservationId, String hostId) throws DataAccessException {
+        Reservation res = reservationRepository.findReservationById(reservationId, hostId);
+        Result<Reservation> result = new Result<>();
+
+        if (res == null) {
+            result.addErrorMessage("No reservation found with the ID of " + reservationId);
+        }
+
+        return res;
+    }
+
     public Result<Reservation> addReservation(Reservation reservation) throws DataAccessException {
         Result<Reservation> result = validate(reservation);
         if (!result.isSuccess()) {
@@ -58,6 +75,28 @@ public class ReservationService {
         BigDecimal total = calculateTotal(reservation.getStart_date(), reservation.getEnd_date(), reservation.getHost());
         reservation.setTotal(total);
         result.setPayload(reservationRepository.addReservation(reservation));
+
+        return result;
+    }
+
+    public Result<Reservation> deleteReservation(Reservation reservation) throws DataAccessException {
+        Result<Reservation> result = new Result<>();
+//        Reservation resToDelete = reservationRepository.findReservationById(reservation);
+
+        if (reservation == null) {
+            result.addErrorMessage("No reservation found");
+            return result;
+        }
+
+        if (reservation.getStart_date().isBefore(LocalDate.now())) {
+            result.addErrorMessage("Cannot delete current reservations or reservations that are in the past");
+            return result;
+        }
+
+        boolean success = reservationRepository.deleteReservation(reservation);
+        if(!success) {
+            result.addErrorMessage("Could not find reservation");
+        }
 
         return result;
     }

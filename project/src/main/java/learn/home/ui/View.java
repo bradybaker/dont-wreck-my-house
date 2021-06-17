@@ -65,6 +65,10 @@ public class View {
         return res;
     }
 
+    public int getReservationId() {
+        return io.readInt("Reservation ID: ");
+    }
+
     public void enterToContinue() {
         io.readString("Press [Enter] to continue.");
     }
@@ -91,6 +95,10 @@ public class View {
     public void displayException(Exception ex) {
         displayHeader("A critical error occurred:");
         io.println(ex.getMessage());
+    }
+
+    public void displayText(String prompt) {
+        io.println(prompt);
     }
 
     public void displayStatus(boolean success, String message) {

@@ -58,6 +58,7 @@ public class Controller {
                     break;
                 case CANCEL_A_RESERVATION:
                     view.displayHeader(MainMenuOption.CANCEL_A_RESERVATION.getDisplayText());
+                    deleteReservation();
                     break;
             }
         } while (option != MainMenuOption.EXIT);
@@ -93,8 +94,36 @@ public class Controller {
             if (isConfirmed) {
                 String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
                 view.displayStatus(true, successMessage);
+            } else {
+                reservationService.deleteReservation(reservation);
             }
         }
+    }
+
+    private void deleteReservation() throws DataAccessException {
+        String guestEmail = view.getGuestEmail();
+        Guest guest = guestService.findGuestByEmail(guestEmail);
+        String hostEmail = view.getHostEmail();
+        Host host = hostService.findHostByEmail(hostEmail);
+
+        List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+        view.displayReservationsByHost(guestReservationsForHost);
+
+        try {
+            int resId = view.getReservationId();
+            Reservation reservation = reservationService.findReservationById(resId, host.getId());
+
+            Result<Reservation> result = reservationService.deleteReservation(reservation);
+            if (result.isSuccess()) {
+                view.displayStatus(true, result.getMessages());
+                view.displayText("Successfully deleted reservation with ID: " + resId);
+            } else {
+                view.displayStatus(false, result.getMessages());
+            }
+        } catch (NullPointerException ex) {
+            view.displayException(ex);
+        }
+
     }
 
 }

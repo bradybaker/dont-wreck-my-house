@@ -35,11 +35,32 @@ class ReservationFileRepositoryTest {
     }
 
     @Test
-    void shouldFindAllReservations() throws DataAccessException {
+    void shouldFindAllReservationsByHost() throws DataAccessException {
         List<Reservation> all = repository.findAllByHostId(hostId);
 
         assertEquals(RESERVATION_COUNT, all.size());
     }
+
+    @Test
+    void shouldFindReservationById() throws DataAccessException {
+        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
+                1, 1), 1, new BigDecimal(1000));
+
+        Host host = new Host();
+        host.setId(hostId);
+        result.setHost(host);
+
+        Guest guest = new Guest();
+        guest.setGuest_id(1);
+        result.setGuest(guest);
+
+        result = repository.addReservation(result);
+
+        Reservation reservation = repository.findReservationById(result.getId(), hostId);
+
+        assertEquals(13, reservation.getId());
+    }
+
 
     @Test
     void shouldAddValidReservation() throws DataAccessException {

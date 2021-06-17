@@ -44,6 +44,16 @@ public class ReservationFileRepository implements ReservationRepository{
         return result;
     }
 
+    public Reservation findReservationById(int reservationId, String hostId) throws DataAccessException {
+        List<Reservation> all = findAllByHostId(hostId);
+        for (Reservation existing : all) {
+            if (existing.getId() == reservationId) {
+                return existing;
+            }
+        }
+        return null;
+    }
+
     public Reservation addReservation(Reservation reservation) throws DataAccessException {
         List<Reservation> all = findAllByHostId(reservation.getHost().getId());
         int nextId = getNextId(all);

@@ -33,6 +33,20 @@ class ReservationServiceTest {
     }
 
     @Test
+    void shouldFindReservationById() throws DataAccessException {
+        Reservation reservation = service.findReservationById(1, HostRepositoryDouble.HOST1.getId());
+        assertEquals(1, reservation.getId());
+    }
+
+    @Test
+    void shouldNotFindReservationAndAddErrorMessage() throws DataAccessException {
+        Result<Reservation> result = new Result<>();
+        Reservation reservation = service.findReservationById(99999, HostRepositoryDouble.HOST1.getId());
+        assertNull(reservation);
+        assertEquals(1, result.getMessages().size());
+    }
+
+    @Test
     void shouldAddValidReservation() throws DataAccessException {
         Reservation res = new Reservation();
         res.setId(2000);
@@ -233,6 +247,63 @@ class ReservationServiceTest {
        LocalDate.of(2021, 7, 5), HostRepositoryDouble.HOST1);
 
        assertEquals(new BigDecimal("500.00"), total);
+    }
+
+    @Test
+    void shouldDeleteReservation() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2025, 1, 1));
+        res.setEnd_date(LocalDate.of(2025, 1, 4));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.setTotal(new BigDecimal("300.00"));
+
+        service.addReservation(res);
+
+        Result<Reservation> success = service.deleteReservation(res);
+
+        assertTrue(success.isSuccess());
+
+    }
+
+    @Test
+    void shouldNotDeleteNullReservation() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2025, 1, 1));
+        res.setEnd_date(LocalDate.of(2025, 1, 4));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.setTotal(new BigDecimal("300.00"));
+
+        service.addReservation(res);
+
+        Result<Reservation> success = service.deleteReservation(null);
+
+        assertFalse(success.isSuccess());
+
+    }
+
+    @Test
+    void shouldNotDeleteReservationInThePast() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2021, 6, 10));
+        res.setEnd_date(LocalDate.of(2021, 6, 30));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.setTotal(new BigDecimal("300.00"));
+
+        service.addReservation(res);
+
+        Result<Reservation> success = service.deleteReservation(res);
+
+        assertFalse(success.isSuccess());
+
     }
 
 }
