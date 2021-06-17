@@ -72,8 +72,8 @@ public class ReservationService {
             return result;
         }
 
-        BigDecimal total = calculateTotal(reservation.getStart_date(), reservation.getEnd_date(), reservation.getHost());
-        reservation.setTotal(total);
+//        BigDecimal total = calculateTotal(reservation.getStart_date(), reservation.getEnd_date(), reservation.getHost());
+//        reservation.setTotal(total);
         result.setPayload(reservationRepository.addReservation(reservation));
 
         return result;
@@ -101,20 +101,20 @@ public class ReservationService {
         return result;
     }
 
-    public BigDecimal calculateTotal (LocalDate startDate, LocalDate endDate, Host host) {
-        BigDecimal total = new BigDecimal("0.00");
-        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
-        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
-
-        for (LocalDate current = startDate; current.compareTo(endDate) < 0; current = current.plusDays(1)) {
-            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
-                total = total.add(weekendRate);
-            } else {
-                total = total.add(standardRate);
-            }
-        }
-        return total;
-    }
+//    public BigDecimal calculateTotal (LocalDate startDate, LocalDate endDate, Host host) {
+//        BigDecimal total = new BigDecimal("0.00");
+//        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
+//        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
+//
+//        for (LocalDate current = startDate; current.compareTo(endDate) < 0; current = current.plusDays(1)) {
+//            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
+//                total = total.add(weekendRate);
+//            } else {
+//                total = total.add(standardRate);
+//            }
+//        }
+//        return total;
+//    }
 
     private Result<Reservation> validate(Reservation reservation) throws DataAccessException {
         Result<Reservation> result = new Result<>();

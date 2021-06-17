@@ -243,10 +243,16 @@ class ReservationServiceTest {
 
     @Test
     void shouldCalculateAccurateTotalWithHost1() {
-       BigDecimal total = service.calculateTotal(LocalDate.of(2021, 7, 1),
-       LocalDate.of(2021, 7, 5), HostRepositoryDouble.HOST1);
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2021, 10, 1));
+        res.setEnd_date(LocalDate.of(2021, 10, 8));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        BigDecimal total = res.getTotal();
 
-       assertEquals(new BigDecimal("500.00"), total);
+       assertEquals(new BigDecimal("800.00"), total);
     }
 
     @Test

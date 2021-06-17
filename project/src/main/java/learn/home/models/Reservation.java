@@ -1,6 +1,7 @@
 package learn.home.models;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class Reservation {
@@ -58,6 +59,17 @@ public class Reservation {
     }
 
     public BigDecimal getTotal() {
+        BigDecimal total = new BigDecimal("0.00");
+        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
+        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
+
+        for (LocalDate current = start_date; current.compareTo(end_date) < 0; current = current.plusDays(1)) {
+            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                total = total.add(weekendRate);
+            } else {
+                total = total.add(standardRate);
+            }
+        }
         return total;
     }
 
