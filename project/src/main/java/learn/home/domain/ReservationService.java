@@ -67,6 +67,11 @@ public class ReservationService {
             return result;
         }
 
+        if (reservation.getStart_date().isBefore(LocalDate.now())) {
+            result.addErrorMessage("Reservation start date must be in the future");
+            return result;
+        }
+
         List<Reservation> all = reservationRepository.findAllByHostId(reservation.getHost().getId());
         for (Reservation existing : all) {
             boolean isOverlap = !(existing.getStart_date().compareTo(reservation.getEnd_date()) >= 0
@@ -159,10 +164,6 @@ public class ReservationService {
         if (reservation.getGuest() == null) {
             result.addErrorMessage("Guest not found");
             return result;
-        }
-
-        if (reservation.getStart_date().isBefore(LocalDate.now())) {
-            result.addErrorMessage("Reservation start date must be in the future");
         }
 
         if (reservation.getStart_date().isAfter(reservation.getEnd_date())) {

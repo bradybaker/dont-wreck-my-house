@@ -113,6 +113,20 @@ public class ConsoleIO {
         }
     }
 
+    public LocalDate readNotRequiredLocalDate(String prompt, LocalDate date) {
+        while (true) {
+            String input = readString(prompt);
+            if (input.isBlank()) {
+                return LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+            }
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (DateTimeParseException ex) {
+                println(INVALID_DATE);
+            }
+        }
+    }
+
     public BigDecimal readBigDecimal(String prompt) {
         while (true) {
             String input = readRequiredString(prompt);

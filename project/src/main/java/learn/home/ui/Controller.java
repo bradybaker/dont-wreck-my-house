@@ -10,6 +10,7 @@ import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -55,6 +56,7 @@ public class Controller {
                     break;
                 case EDIT_A_RESERVATION:
                     view.displayHeader(MainMenuOption.EDIT_A_RESERVATION.getDisplayText());
+                    updateReservation();
                     break;
                 case CANCEL_A_RESERVATION:
                     view.displayHeader(MainMenuOption.CANCEL_A_RESERVATION.getDisplayText());
@@ -83,47 +85,61 @@ public class Controller {
             view.displayReservationsByHost(reservations);
 
             Reservation reservation = view.makeReservation(host, guest);
-            Result<Reservation> result = reservationService.addReservation(reservation);
-
-            if (!result.isSuccess()) {
-                view.displayStatus(false, result.getMessages());
-            }
+            reservation.calculateTotal();
 
             view.displaySummary(reservation);
+
             isConfirmed = view.displayConfirmation();
             if (isConfirmed) {
+                Result<Reservation> result = reservationService.addReservation(reservation);
+
+                if (!result.isSuccess()) {
+                    view.displayStatus(false, result.getMessages());
+                }
+
                 String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
                 view.displayStatus(true, successMessage);
-            } else {
-                reservationService.deleteReservation(reservation);
             }
         }
     }
 
     private void updateReservation() throws DataAccessException {
-        String guestEmail = view.getGuestEmail();
-        Guest guest = guestService.findGuestByEmail(guestEmail);
-        String hostEmail = view.getHostEmail();
-        Host host = hostService.findHostByEmail(hostEmail);
+        boolean isConfirmed = false;
+        while (!isConfirmed) {
+            String guestEmail = view.getGuestEmail();
+            Guest guest = guestService.findGuestByEmail(guestEmail);
+            String hostEmail = view.getHostEmail();
+            Host host = hostService.findHostByEmail(hostEmail);
 
-        List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
-        view.displayReservationsByHost(guestReservationsForHost);
+            List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+            view.displayReservationsByHost(guestReservationsForHost);
 
-        try {
-            int resId = view.getReservationId();
-            Reservation reservation = reservationService.findReservationById(resId, host.getId());
+            try {
+                int resId = view.getReservationId();
+                Reservation reservation = reservationService.findReservationById(resId, host.getId());
 
-            Result<Reservation> result = reservationService.updateReservation(reservation);
-            if (result.isSuccess()) {
-                view.displayStatus(true, result.getMessages());
-                view.displayText("Successfully updated reservation with ID: " + resId);
-            } else {
-                view.displayStatus(false, result.getMessages());
+                Reservation updatedReservation = view.updateReservation(reservation);
+                updatedReservation.setHost(host);
+                updatedReservation.setGuest(guest);
+                updatedReservation.calculateTotal();
+
+
+                view.displaySummary(updatedReservation);
+
+                isConfirmed = view.displayConfirmation();
+                if (isConfirmed) {
+                    Result<Reservation> result = reservationService.updateReservation(reservation);
+
+                    if (!result.isSuccess()) {
+                        view.displayStatus(false, result.getMessages());
+                    }
+                    view.displayStatus(true, result.getMessages());
+                    view.displayText("Successfully updated reservation with ID: " + resId);
+                }
+            } catch (NullPointerException ex) {
+                view.displayException(ex);
             }
-        } catch (NullPointerException ex) {
-            view.displayException(ex);
         }
-
     }
 
     private void deleteReservation() throws DataAccessException {

@@ -65,6 +65,18 @@ public class View {
         return res;
     }
 
+    public Reservation updateReservation(Reservation reservation) {
+        displayHeader("Editing Reservation " + reservation.getId());
+
+        LocalDate startDate = io.readNotRequiredLocalDate("Start Date (" + reservation.getStart_date() + "): ", reservation.getStart_date());
+        reservation.setStart_date(startDate);
+
+        LocalDate endDate = io.readNotRequiredLocalDate("End Date (" + reservation.getEnd_date() + "): ", reservation.getEnd_date());
+        reservation.setEnd_date(endDate);
+
+        return reservation;
+    }
+
     public int getReservationId() {
         return io.readInt("Reservation ID: ");
     }
