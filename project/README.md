@@ -168,16 +168,16 @@ The application user is an accommodation administrator. They pair guests to host
 
 ##### Edit an Existing Reservation
 * Data Layer `(Day 3 afternoon/evening - 1 hr)`
-  * [ ] Build methods in corresponding file repo's and double
-  * [ ] Test methods built, both happy and unhappy paths
+  * [X] Build methods in corresponding file repo's and double
+  * [X] Test methods built, both happy and unhappy paths
 * Domain Layer `(Day 3 evening - 2 hrs)`
-  * [ ] Build methods in corresponding services
-  * [ ] Implement validation methods
-  * [ ] Test methods built, both happy and unhappy paths
+  * [X] Build methods in corresponding services
+  * [X] Implement validation methods
+  * [X] Test methods built, both happy and unhappy paths
 * Ui layer `(Day 4 morning/afternoon - 4 hrs)`
-  * [ ] Build methods in corresponding controller/view
-  * [ ] Build corresponding helper methods in consoleIO
-  * [ ] Build Main Menu methods/run methods 
+  * [X] Build methods in corresponding controller/view
+  * [X] Build corresponding helper methods in consoleIO
+  * [X] Build Main Menu methods/run methods 
 
 ##### Cancel an Existing Reservation
 * Data Layer `(Day 4 afternoon - 2 hrs)`
