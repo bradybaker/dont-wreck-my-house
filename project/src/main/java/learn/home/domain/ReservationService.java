@@ -6,8 +6,6 @@ import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -42,11 +40,8 @@ public class ReservationService {
             reservation.setGuest(guestMap.get(reservation.getGuest().getGuest_id()));
         }
 
-        List<Reservation> sortByStartDate = result.stream().sorted(Comparator.comparing(Reservation::getStart_date))
+        return result.stream().sorted(Comparator.comparing(Reservation::getStart_date))
                 .collect(Collectors.toList());
-
-
-        return sortByStartDate;
     }
 
     public List<Reservation> filterReservationsByGuestEmail(String hostEmail, String guestEmail) throws DataAccessException {
@@ -72,16 +67,58 @@ public class ReservationService {
             return result;
         }
 
-//        BigDecimal total = calculateTotal(reservation.getStart_date(), reservation.getEnd_date(), reservation.getHost());
-//        reservation.setTotal(total);
+        List<Reservation> all = reservationRepository.findAllByHostId(reservation.getHost().getId());
+        for (Reservation existing : all) {
+            boolean isOverlap = !(existing.getStart_date().compareTo(reservation.getEnd_date()) >= 0
+                    || existing.getEnd_date().compareTo(reservation.getStart_date()) <= 0);
+
+            if (isOverlap) {
+                result.addErrorMessage("These dates conflict with an already existing reservation for this host");
+                return result;
+            }
+        }
+
         result.setPayload(reservationRepository.addReservation(reservation));
+
+        return result;
+    }
+
+    public Result<Reservation> updateReservation(Reservation reservation) throws DataAccessException {
+        Result<Reservation> result = validate(reservation);
+
+        List<Reservation> all = reservationRepository.findAllByHostId(reservation.getHost().getId());
+        for (Reservation existing : all) {
+            boolean resSurroundsExisting = existing.getStart_date().isAfter(reservation.getStart_date()) && existing.getEnd_date().isBefore(reservation.getEnd_date());
+            boolean resSurroundsExistingStart = reservation.getStart_date().isBefore(existing.getStart_date()) && reservation.getEnd_date().isAfter(existing.getStart_date()) && reservation.getEnd_date().isBefore(existing.getEnd_date());
+            boolean resSurroundsExistingEnd = reservation.getStart_date().isAfter(existing.getStart_date()) && reservation.getStart_date().isBefore(existing.getStart_date()) && reservation.getEnd_date().isAfter(existing.getEnd_date());
+            boolean resEqualsExisting = reservation.getStart_date().equals(existing.getStart_date()) && reservation.getEnd_date().equals(existing.getEnd_date());
+            boolean existingSurroundsRes = existing.getStart_date().isBefore(reservation.getStart_date()) && existing.getEnd_date().isAfter(reservation.getEnd_date());
+            boolean existingEndEqualsResEndResStartIsBefore = reservation.getStart_date().isBefore(existing.getStart_date()) && reservation.getEnd_date().equals(existing.getEnd_date());
+            boolean existingEndEqualsResResStartIsAfter = reservation.getStart_date().isAfter(existing.getStart_date()) && reservation.getEnd_date().equals(existing.getEnd_date());
+            boolean existingStartEqualsResStartResEndIsBefore = reservation.getStart_date().equals(existing.getStart_date()) && reservation.getEnd_date().isBefore(existing.getEnd_date());
+            boolean existingStartEqualsResStartResEndIsAfter = reservation.getStart_date().equals(existing.getStart_date()) && reservation.getEnd_date().isAfter(existing.getEnd_date());
+            boolean idsNotEqual = existing.getId() != reservation.getId();
+
+
+            boolean isOverlap = (resEqualsExisting || resSurroundsExisting || resSurroundsExistingStart || resSurroundsExistingEnd ||
+                    existingSurroundsRes || existingEndEqualsResEndResStartIsBefore || existingEndEqualsResResStartIsAfter ||
+                    existingStartEqualsResStartResEndIsBefore || existingStartEqualsResStartResEndIsAfter);
+            if (isOverlap && idsNotEqual) {
+                result.addErrorMessage("These dates conflict with an already existing reservation for this host");
+                return result;
+            }
+        }
+
+        boolean success = reservationRepository.updateReservation(reservation);
+        if(!success) {
+            result.addErrorMessage("Could not update reservation");
+        }
 
         return result;
     }
 
     public Result<Reservation> deleteReservation(Reservation reservation) throws DataAccessException {
         Result<Reservation> result = new Result<>();
-//        Reservation resToDelete = reservationRepository.findReservationById(reservation);
 
         if (reservation == null) {
             result.addErrorMessage("No reservation found");
@@ -100,21 +137,6 @@ public class ReservationService {
 
         return result;
     }
-
-//    public BigDecimal calculateTotal (LocalDate startDate, LocalDate endDate, Host host) {
-//        BigDecimal total = new BigDecimal("0.00");
-//        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
-//        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
-//
-//        for (LocalDate current = startDate; current.compareTo(endDate) < 0; current = current.plusDays(1)) {
-//            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
-//                total = total.add(weekendRate);
-//            } else {
-//                total = total.add(standardRate);
-//            }
-//        }
-//        return total;
-//    }
 
     private Result<Reservation> validate(Reservation reservation) throws DataAccessException {
         Result<Reservation> result = new Result<>();
@@ -147,19 +169,6 @@ public class ReservationService {
             result.addErrorMessage("Reservation start date must be before the end date");
         }
 
-        List<Reservation> all = reservationRepository.findAllByHostId(reservation.getHost().getId());
-        for (Reservation existing : all) {
-            boolean isOverlap = !(existing.getStart_date().compareTo(reservation.getEnd_date()) >= 0
-                        || existing.getEnd_date().compareTo(reservation.getStart_date()) <= 0);
-
-            if (isOverlap) {
-               result.addErrorMessage("These dates conflict with an already existing reservation for this host");
-               return result;
-            }
-//            if (reservation.getStart_date().isBefore(existing.getStart_date()) && reservation.getEnd_date().isAfter(existing.getEnd_date())) {
-//
-//            }
-        }
         return result;
     }
 }

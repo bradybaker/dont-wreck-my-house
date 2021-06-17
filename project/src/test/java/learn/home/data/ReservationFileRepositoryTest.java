@@ -96,8 +96,8 @@ class ReservationFileRepositoryTest {
 
     @Test
     void shouldUpdateReservation() throws DataAccessException {
-        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
-                1, 1), 1);
+        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2024,
+                1, 4), 1);
 
         Host host = new Host();
         host.setId(hostId);
@@ -121,6 +121,7 @@ class ReservationFileRepositoryTest {
         assertTrue(success);
         assertEquals(13, all.get(12).getId());
         assertEquals(LocalDate.of(2024, 1, 3), all.get(12).getStart_date());
+        assertEquals(new BigDecimal("300.00"), all.get(12).getTotal());
 
     }
 

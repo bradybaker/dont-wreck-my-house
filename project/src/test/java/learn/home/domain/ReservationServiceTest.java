@@ -38,13 +38,13 @@ class ReservationServiceTest {
         assertEquals(1, reservation.getId());
     }
 
-    @Test
-    void shouldNotFindReservationAndAddErrorMessage() throws DataAccessException {
-        Result<Reservation> result = new Result<>();
-        Reservation reservation = service.findReservationById(99999, HostRepositoryDouble.HOST1.getId());
-        assertNull(reservation);
-        assertEquals(1, result.getMessages().size());
-    }
+//    @Test
+//    void shouldNotFindReservationAndAddErrorMessage() throws DataAccessException {
+//        Result<Reservation> result = new Result<>();
+//        Reservation reservation = service.findReservationById(99999, HostRepositoryDouble.HOST1.getId());
+//        assertNull(reservation);
+//        assertEquals(1, result.getMessages().size());
+//    }
 
     @Test
     void shouldAddValidReservation() throws DataAccessException {
@@ -250,9 +250,82 @@ class ReservationServiceTest {
         res.setGuest_id(1);
         res.setGuest(GuestRepositoryDouble.GUEST1);
         res.setHost(HostRepositoryDouble.HOST1);
-        BigDecimal total = res.getTotal();
+        res.calculateTotal();
 
-       assertEquals(new BigDecimal("800.00"), total);
+       assertEquals(new BigDecimal("800.00"), res.getTotal());
+    }
+
+    @Test
+    void shouldUpdateValidReservation() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.setStart_date(LocalDate.of(2021, 10, 11));
+        res.setEnd_date(LocalDate.of(2021, 10, 13));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.calculateTotal();
+
+        Result<Reservation> result = service.updateReservation(res);
+
+        List<Reservation> reservations = service.findReservationByEmail("smith@gmail.com");
+
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldUpdateValidReservationAfterAdding() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2025, 1, 1));
+        res.setEnd_date(LocalDate.of(2025, 1, 4));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.calculateTotal();
+
+        service.addReservation(res);
+
+        Reservation resUpdated = new Reservation();
+        resUpdated.setId(2000);
+        resUpdated.setStart_date(LocalDate.of(2025, 1, 2));
+        resUpdated.setEnd_date(LocalDate.of(2025, 1, 4));
+        resUpdated.setGuest_id(1);
+        resUpdated.setGuest(GuestRepositoryDouble.GUEST1);
+        resUpdated.setHost(HostRepositoryDouble.HOST1);
+        resUpdated.calculateTotal();
+
+        Result<Reservation> result = service.updateReservation(resUpdated);
+
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateIfDatesOverlapExistingReservation() throws DataAccessException {
+        Reservation res = new Reservation();
+        res.setId(2000);
+        res.setStart_date(LocalDate.of(2025, 1, 1));
+        res.setEnd_date(LocalDate.of(2025, 1, 4));
+        res.setGuest_id(1);
+        res.setGuest(GuestRepositoryDouble.GUEST1);
+        res.setHost(HostRepositoryDouble.HOST1);
+        res.calculateTotal();
+
+        service.addReservation(res);
+        
+        Reservation resUpdated = new Reservation();
+        resUpdated.setId(2000);
+        resUpdated.setStart_date(LocalDate.of(2021, 10, 9));
+        resUpdated.setEnd_date(LocalDate.of(2021, 10, 13));
+        resUpdated.setGuest_id(1);
+        resUpdated.setGuest(GuestRepositoryDouble.GUEST1);
+        resUpdated.setHost(HostRepositoryDouble.HOST1);
+        resUpdated.calculateTotal();
+
+        Result<Reservation> result = service.updateReservation(resUpdated);
+
+        assertFalse(result.isSuccess());
+
     }
 
     @Test

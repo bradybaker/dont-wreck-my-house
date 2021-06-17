@@ -100,6 +100,32 @@ public class Controller {
         }
     }
 
+    private void updateReservation() throws DataAccessException {
+        String guestEmail = view.getGuestEmail();
+        Guest guest = guestService.findGuestByEmail(guestEmail);
+        String hostEmail = view.getHostEmail();
+        Host host = hostService.findHostByEmail(hostEmail);
+
+        List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+        view.displayReservationsByHost(guestReservationsForHost);
+
+        try {
+            int resId = view.getReservationId();
+            Reservation reservation = reservationService.findReservationById(resId, host.getId());
+
+            Result<Reservation> result = reservationService.updateReservation(reservation);
+            if (result.isSuccess()) {
+                view.displayStatus(true, result.getMessages());
+                view.displayText("Successfully updated reservation with ID: " + resId);
+            } else {
+                view.displayStatus(false, result.getMessages());
+            }
+        } catch (NullPointerException ex) {
+            view.displayException(ex);
+        }
+
+    }
+
     private void deleteReservation() throws DataAccessException {
         String guestEmail = view.getGuestEmail();
         Guest guest = guestService.findGuestByEmail(guestEmail);
