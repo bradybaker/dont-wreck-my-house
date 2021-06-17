@@ -18,12 +18,11 @@ public class Reservation {
 
     }
 
-    public Reservation(int id, LocalDate start_date, LocalDate end_date, int guest_id, BigDecimal total) {
+    public Reservation(int id, LocalDate start_date, LocalDate end_date, int guest_id) {
         this.id = id;
         this.start_date = start_date;
         this.end_date = end_date;
         this.guest_id = guest_id;
-        this.total = total;
     }
 
     public int getId() {
@@ -58,20 +57,7 @@ public class Reservation {
         this.guest_id = guest_id;
     }
 
-    public BigDecimal getTotal() {
-        BigDecimal total = new BigDecimal("0.00");
-        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
-        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
-
-        for (LocalDate current = start_date; current.compareTo(end_date) < 0; current = current.plusDays(1)) {
-            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
-                total = total.add(weekendRate);
-            } else {
-                total = total.add(standardRate);
-            }
-        }
-        return total;
-    }
+    public BigDecimal getTotal() { return total; }
 
     public void setTotal(BigDecimal total) {
         this.total = total;
@@ -91,5 +77,20 @@ public class Reservation {
 
     public void setGuest(Guest guest) {
         this.guest = guest;
+    }
+
+    public void calculateTotal() {
+        BigDecimal total = new BigDecimal("0.00");
+        BigDecimal standardRate = new BigDecimal(String.valueOf(host.getStandard_rate()));
+        BigDecimal weekendRate = new BigDecimal(String.valueOf(host.getWeekend_rate()));
+
+        for (LocalDate current = start_date; current.compareTo(end_date) < 0; current = current.plusDays(1)) {
+            if (current.getDayOfWeek() == DayOfWeek.FRIDAY || current.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                total = total.add(weekendRate);
+            } else {
+                total = total.add(standardRate);
+            }
+        }
+        setTotal(total);
     }
 }

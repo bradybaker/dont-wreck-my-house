@@ -44,15 +44,19 @@ class ReservationFileRepositoryTest {
     @Test
     void shouldFindReservationById() throws DataAccessException {
         Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
-                1, 1), 1, new BigDecimal(1000));
+                1, 1), 1);
 
         Host host = new Host();
         host.setId(hostId);
+        host.setStandard_rate(new BigDecimal("100.00"));
+        host.setWeekend_rate(new BigDecimal("200.00"));
         result.setHost(host);
 
         Guest guest = new Guest();
         guest.setGuest_id(1);
         result.setGuest(guest);
+
+        result.calculateTotal();
 
         result = repository.addReservation(result);
 
@@ -65,15 +69,20 @@ class ReservationFileRepositoryTest {
     @Test
     void shouldAddValidReservation() throws DataAccessException {
         Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
-                        1, 1), 1, new BigDecimal(1000));
+                        1, 1), 1);
+
 
         Host host = new Host();
         host.setId(hostId);
+        host.setStandard_rate(new BigDecimal("100.00"));
+        host.setWeekend_rate(new BigDecimal("200.00"));
         result.setHost(host);
 
         Guest guest = new Guest();
         guest.setGuest_id(1);
         result.setGuest(guest);
+
+        result.calculateTotal();
 
         result = repository.addReservation(result);
         List<Reservation> all = repository.findAllByHostId(hostId);
@@ -82,22 +91,55 @@ class ReservationFileRepositoryTest {
         assertEquals(13, all.size());
         assertEquals(1, result.getGuest_id());
         assertEquals(13, all.get(12).getId());
-        assertEquals(new BigDecimal(1000), all.get(12).getTotal());
         assertEquals(LocalDate.of(2024, 1, 1), all.get(12).getStart_date());
     }
 
     @Test
-    void shouldDeleteReservation() throws DataAccessException {
+    void shouldUpdateReservation() throws DataAccessException {
         Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
-                1, 1), 1, new BigDecimal(1000));
+                1, 1), 1);
 
         Host host = new Host();
         host.setId(hostId);
+        host.setStandard_rate(new BigDecimal("100.00"));
+        host.setWeekend_rate(new BigDecimal("200.00"));
         result.setHost(host);
 
         Guest guest = new Guest();
         guest.setGuest_id(1);
         result.setGuest(guest);
+
+        result.calculateTotal();
+
+        repository.addReservation(result);
+
+        result.setStart_date(LocalDate.of(2024, 1, 3));
+        boolean success = repository.updateReservation(result);
+
+        List<Reservation> all = repository.findAllByHostId(hostId);
+
+        assertTrue(success);
+        assertEquals(13, all.get(12).getId());
+        assertEquals(LocalDate.of(2024, 1, 3), all.get(12).getStart_date());
+
+    }
+
+    @Test
+    void shouldDeleteReservation() throws DataAccessException {
+        Reservation result = new Reservation(13, LocalDate.of(2024, 1, 1), LocalDate.of(2025,
+                1, 1), 1);
+
+        Host host = new Host();
+        host.setId(hostId);
+        host.setStandard_rate(new BigDecimal("100.00"));
+        host.setWeekend_rate(new BigDecimal("200.00"));
+        result.setHost(host);
+
+        Guest guest = new Guest();
+        guest.setGuest_id(1);
+        result.setGuest(guest);
+
+        result.calculateTotal();
 
         result = repository.addReservation(result);
         boolean success = repository.deleteReservation(result);
