@@ -27,16 +27,14 @@ public class ReservationService {
 
     public List<Reservation> findReservationByEmail(String email) throws DataAccessException {
 
-        Map<String, Host> hostMap = hostRepository.findAll().stream()
-                .collect(Collectors.toMap(Host::getId, i -> i));
-
         Map<Integer, Guest> guestMap = guestRepository.findAll().stream()
                 .collect(Collectors.toMap(Guest::getGuest_id, i -> i));
 
         Host host = hostRepository.findHostByEmail(email);
+
         List<Reservation> result = reservationRepository.findAllByHostId(host.getId());
         for (Reservation reservation : result) {
-            reservation.setHost(hostMap.get(reservation.getHost().getId()));
+            reservation.setHost(host);
             reservation.setGuest(guestMap.get(reservation.getGuest().getGuest_id()));
         }
 
