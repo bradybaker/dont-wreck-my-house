@@ -35,10 +35,11 @@ public class View {
 
     public void displayReservationsByHost(List<Reservation> reservations) {
         if (reservations == null || reservations.isEmpty()) {
+            io.println(" ");
             io.println("No reservations found. Please search again");
+            return;
         }
 
-        assert reservations != null;
         Host host = reservations.get(0).getHost();
         displayHeader(host.getLast_name() + ": " + host.getCity() + ", " + host.getState());
         io.println("(Sorted by Start Date)");

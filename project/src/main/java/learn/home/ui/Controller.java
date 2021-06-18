@@ -10,7 +10,6 @@ import learn.home.models.Host;
 import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -70,6 +69,10 @@ public class Controller {
         String email = view.getHostEmail();
         List<Reservation> reservations = reservationService.findReservationByEmail(email);
         view.displayReservationsByHost(reservations);
+
+        if (reservations == null || reservations.isEmpty()) {
+            return;
+        }
         view.enterToContinue();
     }
 
@@ -84,6 +87,10 @@ public class Controller {
             List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
             view.displayReservationsByHost(reservations);
 
+            if (reservations == null || reservations.isEmpty()) {
+                return;
+            }
+
             Reservation reservation = view.makeReservation(host, guest);
             reservation.calculateTotal();
 
@@ -95,6 +102,7 @@ public class Controller {
 
                 if (!result.isSuccess()) {
                     view.displayStatus(false, result.getMessages());
+                    return;
                 }
 
                 String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
@@ -106,15 +114,20 @@ public class Controller {
     private void updateReservation() throws DataAccessException {
         boolean isConfirmed = false;
         while (!isConfirmed) {
-            String guestEmail = view.getGuestEmail();
-            Guest guest = guestService.findGuestByEmail(guestEmail);
-            String hostEmail = view.getHostEmail();
-            Host host = hostService.findHostByEmail(hostEmail);
-
-            List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
-            view.displayReservationsByHost(guestReservationsForHost);
-
             try {
+                String guestEmail = view.getGuestEmail();
+                Guest guest = guestService.findGuestByEmail(guestEmail);
+                String hostEmail = view.getHostEmail();
+                Host host = hostService.findHostByEmail(hostEmail);
+
+                List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+
+                view.displayReservationsByHost(guestReservationsForHost);
+
+                if (guestReservationsForHost == null || guestReservationsForHost.isEmpty()) {
+                    return;
+                }
+
                 int resId = view.getReservationId();
                 Reservation reservation = reservationService.findReservationById(resId, host.getId());
 
@@ -143,6 +156,7 @@ public class Controller {
     }
 
     private void deleteReservation() throws DataAccessException {
+        try {
         String guestEmail = view.getGuestEmail();
         Guest guest = guestService.findGuestByEmail(guestEmail);
         String hostEmail = view.getHostEmail();
@@ -151,7 +165,7 @@ public class Controller {
         List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
         view.displayReservationsByHost(guestReservationsForHost);
 
-        try {
+
             int resId = view.getReservationId();
             Reservation reservation = reservationService.findReservationById(resId, host.getId());
 
