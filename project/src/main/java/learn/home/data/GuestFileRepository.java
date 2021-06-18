@@ -1,7 +1,6 @@
 package learn.home.data;
 
 import learn.home.models.Guest;
-import learn.home.models.Host;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package learn.home.data;
 
 import learn.home.models.Guest;
-import learn.home.models.Host;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

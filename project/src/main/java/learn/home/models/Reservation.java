@@ -3,7 +3,6 @@ package learn.home.models;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Reservation {
 
@@ -14,7 +13,6 @@ public class Reservation {
     private int guest_id;
     private Guest guest;
     private BigDecimal total;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     public Reservation() {
 

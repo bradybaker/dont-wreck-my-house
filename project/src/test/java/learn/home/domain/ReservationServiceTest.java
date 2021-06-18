@@ -174,7 +174,7 @@ class ReservationServiceTest {
 
         Result<Reservation> result = service.addReservation(res);
         assertFalse(result.isSuccess());
-        assertEquals("Reservation start date must be in the future", result.getMessages().get(0));
+        assertEquals("Reservation start date must be today or later", result.getMessages().get(0));
     }
 
     @Test
