@@ -87,10 +87,6 @@ public class Controller {
             List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
             view.displayReservationsByHost(reservations);
 
-            if (reservations == null || reservations.isEmpty()) {
-                return;
-            }
-
             Reservation reservation = view.makeReservation(host, guest);
             reservation.calculateTotal();
 
