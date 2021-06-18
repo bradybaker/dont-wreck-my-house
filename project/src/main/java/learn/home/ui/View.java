@@ -6,12 +6,15 @@ import learn.home.models.Reservation;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
 public class View {
 
     private final ConsoleIO io;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
 
     public View(ConsoleIO io) { this.io = io; }
 
@@ -44,10 +47,12 @@ public class View {
         displayHeader(host.getLast_name() + ": " + host.getCity() + ", " + host.getState());
         io.println("(Sorted by Start Date)");
         for (Reservation reservation : reservations) {
+            String startDate = reservation.getStart_date().format(formatter);
+            String endDate = reservation.getEnd_date().format(formatter);
             io.printf("ID: %s, %s - %s, Guest: %s, %s, Email: %s%n",
                     reservation.getId(),
-                    reservation.getStart_date(),
-                    reservation.getEnd_date(),
+                    startDate,
+                    endDate,
                     reservation.getGuest().getLast_name(),
                     reservation.getGuest().getFirst_name(),
                     reservation.getGuest().getEmail());
@@ -69,10 +74,12 @@ public class View {
     public Reservation updateReservation(Reservation reservation) {
         displayHeader("Editing Reservation " + reservation.getId());
 
-        LocalDate startDate = io.readNotRequiredLocalDate("Start Date (" + reservation.getStart_date() + "): ", reservation.getStart_date());
+        String startDateFormat = reservation.getStart_date().format(formatter);
+        String endDateFormat = reservation.getEnd_date().format(formatter);
+        LocalDate startDate = io.readNotRequiredLocalDate("Start Date (" + startDateFormat + "): ", reservation.getStart_date());
         reservation.setStart_date(startDate);
 
-        LocalDate endDate = io.readNotRequiredLocalDate("End Date (" + reservation.getEnd_date() + "): ", reservation.getEnd_date());
+        LocalDate endDate = io.readNotRequiredLocalDate("End Date (" + endDateFormat + "): ", reservation.getEnd_date());
         reservation.setEnd_date(endDate);
 
         return reservation;

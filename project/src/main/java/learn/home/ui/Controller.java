@@ -20,6 +20,7 @@ public class Controller {
     private final GuestService guestService;
     private final View view;
 
+
     public Controller(ReservationService reservationService, HostService hostService, GuestService guestService, View view) {
         this.reservationService = reservationService;
         this.hostService = hostService;
