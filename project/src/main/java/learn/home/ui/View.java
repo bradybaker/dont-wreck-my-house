@@ -36,10 +36,11 @@ public class View {
 
     public String getGuestEmail() {return io.readRequiredString("Guest Email: "); }
 
-    public void displayReservationsByHost(List<Reservation> reservations) {
-        if (reservations == null || reservations.isEmpty()) {
+    public void displayReservations(List<Reservation> reservations, String lastName) {
+
+        if (reservations.isEmpty()) {
             io.println(" ");
-            io.println("No reservations found. Please search again");
+            io.println(lastName + " has no reservations booked.");
             return;
         }
 

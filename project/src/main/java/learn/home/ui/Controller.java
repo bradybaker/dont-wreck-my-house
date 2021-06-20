@@ -68,8 +68,18 @@ public class Controller {
 
     private void viewReservationsByHost() throws DataAccessException {
         String email = view.getHostEmail();
+
+        Host host = hostService.findHostByEmail(email);
+
+        if (host.getEmail() == null) {
+            Result<Reservation> result = new Result<>();
+            result.addErrorMessage("No host found at that email");
+            view.displayStatus(false, result.getMessages());
+            return;
+        }
+
         List<Reservation> reservations = reservationService.findReservationByEmail(email);
-        view.displayReservationsByHost(reservations);
+        view.displayReservations(reservations, host.getLast_name());
 
         if (reservations == null || reservations.isEmpty()) {
             return;
@@ -82,11 +92,26 @@ public class Controller {
         while (!isConfirmed) {
             String guestEmail = view.getGuestEmail();
             Guest guest = guestService.findGuestByEmail(guestEmail);
+
+            if (guest.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No guest found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
+
             String hostEmail = view.getHostEmail();
             Host host = hostService.findHostByEmail(hostEmail);
 
+            if (host.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No host found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
+
             List<Reservation> reservations = reservationService.findReservationByEmail(hostEmail);
-            view.displayReservationsByHost(reservations);
+            view.displayReservations(reservations, host.getLast_name());
 
             Reservation reservation = view.makeReservation(host, guest);
             reservation.calculateTotal();
@@ -96,14 +121,13 @@ public class Controller {
             isConfirmed = view.displayConfirmation();
             if (isConfirmed) {
                 Result<Reservation> result = reservationService.addReservation(reservation);
-
-                if (!result.isSuccess()) {
+                if (result.isSuccess()) {
+                    String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
+                    view.displayStatus(true, successMessage);
+                } else {
                     view.displayStatus(false, result.getMessages());
-                    return;
                 }
 
-                String successMessage = String.format("Reservation %s created.", result.getPayload().getId());
-                view.displayStatus(true, successMessage);
             }
         }
     }
@@ -111,56 +135,85 @@ public class Controller {
     private void updateReservation() throws DataAccessException {
         boolean isConfirmed = false;
         while (!isConfirmed) {
-            try {
-                String guestEmail = view.getGuestEmail();
-                Guest guest = guestService.findGuestByEmail(guestEmail);
-                String hostEmail = view.getHostEmail();
-                Host host = hostService.findHostByEmail(hostEmail);
+            String guestEmail = view.getGuestEmail();
+            Guest guest = guestService.findGuestByEmail(guestEmail);
 
-                List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+            if (guest.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No guest found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
 
-                view.displayReservationsByHost(guestReservationsForHost);
+            String hostEmail = view.getHostEmail();
+            Host host = hostService.findHostByEmail(hostEmail);
 
-                if (guestReservationsForHost == null || guestReservationsForHost.isEmpty()) {
-                    return;
-                }
+            if (host.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No host found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
 
-                int resId = view.getReservationId();
-                Reservation reservation = reservationService.findReservationById(resId, host.getId());
+            List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
 
-                Reservation updatedReservation = view.updateReservation(reservation);
-                updatedReservation.setHost(host);
-                updatedReservation.setGuest(guest);
-                updatedReservation.calculateTotal();
+            view.displayReservations(guestReservationsForHost, guest.getLast_name());
+
+            if (guestReservationsForHost.isEmpty()) {
+                return;
+            }
+
+            int resId = view.getReservationId();
+            Reservation reservation = reservationService.findReservationById(resId, host.getId());
+
+            Reservation updatedReservation = view.updateReservation(reservation);
+            updatedReservation.setHost(host);
+            updatedReservation.setGuest(guest);
+            updatedReservation.calculateTotal();
 
 
-                view.displaySummary(updatedReservation);
+            view.displaySummary(updatedReservation);
 
-                isConfirmed = view.displayConfirmation();
-                if (isConfirmed) {
-                    Result<Reservation> result = reservationService.updateReservation(reservation);
-
-                    if (!result.isSuccess()) {
-                        view.displayStatus(false, result.getMessages());
-                    }
+            isConfirmed = view.displayConfirmation();
+            if (isConfirmed) {
+                Result<Reservation> result = reservationService.updateReservation(reservation);
+                if (result.isSuccess()) {
                     view.displayStatus(true, result.getMessages());
                     view.displayText("Successfully updated reservation with ID: " + resId);
+                } else {
+                    view.displayStatus(false, result.getMessages());
                 }
-            } catch (NullPointerException ex) {
-                view.displayException(ex);
             }
         }
     }
 
-    private void deleteReservation() throws DataAccessException {
-        try {
-        String guestEmail = view.getGuestEmail();
-        Guest guest = guestService.findGuestByEmail(guestEmail);
-        String hostEmail = view.getHostEmail();
-        Host host = hostService.findHostByEmail(hostEmail);
+        private void deleteReservation () throws DataAccessException {
+            String guestEmail = view.getGuestEmail();
+            Guest guest = guestService.findGuestByEmail(guestEmail);
 
-        List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
-        view.displayReservationsByHost(guestReservationsForHost);
+            if (guest.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No guest found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
+
+            String hostEmail = view.getHostEmail();
+            Host host = hostService.findHostByEmail(hostEmail);
+
+            if (host.getEmail() == null) {
+                Result<Reservation> result = new Result<>();
+                result.addErrorMessage("No host found at that email");
+                view.displayStatus(false, result.getMessages());
+                return;
+            }
+
+            List<Reservation> guestReservationsForHost = reservationService.filterReservationsByGuestEmail(host.getEmail(), guest.getEmail());
+            view.displayReservations(guestReservationsForHost, guest.getLast_name());
+
+            if (guestReservationsForHost.isEmpty()) {
+                return;
+            }
 
 
             int resId = view.getReservationId();
@@ -173,10 +226,7 @@ public class Controller {
             } else {
                 view.displayStatus(false, result.getMessages());
             }
-        } catch (NullPointerException ex) {
-            view.displayException(ex);
         }
 
-    }
-
 }
+

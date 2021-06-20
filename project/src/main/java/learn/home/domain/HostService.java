@@ -21,14 +21,7 @@ public class HostService {
     }
 
     public Host findHostByEmail(String email) throws DataAccessException {
-        Host host = repository.findHostByEmail(email);
-        Result<Host> result = new Result<>();
-
-        if (host == null) {
-            result.addErrorMessage("Could not find host with email: " + email);
-        }
-
-        return host;
+        return repository.findHostByEmail(email);
     }
 
 }
