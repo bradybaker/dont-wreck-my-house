@@ -81,7 +81,7 @@ public class Controller {
         List<Reservation> reservations = reservationService.findReservationByEmail(email);
         view.displayReservations(reservations, host.getLast_name());
 
-        if (reservations == null || reservations.isEmpty()) {
+        if (reservations.isEmpty()) {
             return;
         }
         view.enterToContinue();
